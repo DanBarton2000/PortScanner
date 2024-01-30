@@ -2,7 +2,7 @@
   "profiles": {
     "PortScanner": {
       "commandName": "Project",
-      "commandLineArgs": "127.0.0.1 -p 8080"
+      "commandLineArgs": "scanme.nmap.org"
     }
   }
 }
