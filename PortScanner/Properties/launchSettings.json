@@ -2,7 +2,7 @@
   "profiles": {
     "PortScanner": {
       "commandName": "Project",
-      "commandLineArgs": "scanme.nmap.org"
+      "commandLineArgs": "scanme.nmap.org -p 1-50 -x 2-20"
     }
   }
 }

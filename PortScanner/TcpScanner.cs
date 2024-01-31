@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PortScanner
 {
 	internal class TcpScanner
 	{
         private IPAddress _address = IPAddress.Loopback;
-        private readonly List<int> _ports = new();
+        private List<int> _ports = new();
 
 		private int _openPorts = 0;
 		private int _closedPorts = 0;
@@ -64,9 +59,21 @@ namespace PortScanner
 			Console.WriteLine($"IP address: {_address}");
 		}
 
-		public void SetIncludePorts(string ports)
+		public void SetPorts(string includePorts, string excludePorts) 
 		{
-			var split = ports.Split('-');
+			_ports = ParsePortString(includePorts);
+
+			foreach (int port in ParsePortString(excludePorts))
+			{
+				_ports.Remove(port);
+			}
+		}
+
+		private static List<int> ParsePortString(string portString)
+		{
+			List<int> ports = new();
+
+			var split = portString.Split('-');
 
 			if (split.Length == 1)
 			{
@@ -74,7 +81,7 @@ namespace PortScanner
 				{
 					throw new ArgumentException($"Could not parse port '{split[0]}'");
 				}
-				_ports.Add(port);
+				ports.Add(port);
 			}
 			else if (split.Length == 2)
 			{
@@ -86,12 +93,14 @@ namespace PortScanner
 				{
 					throw new ArgumentException($"Could not parse port '{split[1]}'");
 				}
-				_ports.AddRange(Enumerable.Range(port1, port2 - port1 + 1));
+				ports.AddRange(Enumerable.Range(port1, port2 - port1 + 1));
 			}
 			else
 			{
 				throw new ArgumentException($"Too many arguments: '{ports}'");
 			}
+
+			return ports;
 		}
-    }
+	}
 }
